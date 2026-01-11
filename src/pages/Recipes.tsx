@@ -284,7 +284,6 @@ const Recipes: React.FC = () => {
                       src={recipe.cover_image || 'https://images.unsplash.com/photo-1495521841625-f342588d6e65?auto=format&fit=crop&w=800&q=80'}
                       alt={recipe.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      loading="lazy"
                       decoding="async"
                       width="400"
                       height="208"
@@ -299,41 +298,37 @@ const Recipes: React.FC = () => {
                     <div className="flex items-center gap-4 text-sm text-kawaii-text-sub mb-3 font-cute">
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4 text-kawaii-pink-400" />
-                        <span>{recipe.total_time}分</span>
+                        <span>{recipe.prep_time + recipe.cook_time} 分钟</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <Flame className="w-4 h-4 text-kawaii-pink-400" />
-                        <span>难度 {recipe.difficulty}</span>
+                        <Flame className={`w-4 h-4 ${recipe.difficulty > 3 ? 'text-red-400' : 'text-orange-400'}`} />
+                        <span>{recipe.difficulty > 3 ? '较难' : '简单'}</span>
                       </div>
                     </div>
-                    <p className="text-kawaii-text-sub text-sm line-clamp-2 font-cute leading-relaxed">
+                    <p className="text-gray-500 line-clamp-2 text-sm font-cute">
                       {recipe.description}
                     </p>
                   </div>
                 </div>
               ))}
-              
-              {/* Load More Sentinel */}
-              {visibleCount < filteredRecipes.length && (
-                <div ref={loadMoreRef} className="col-span-full flex justify-center py-8">
-                  <Loader2 className="w-8 h-8 animate-spin text-kawaii-pink-300" />
-                </div>
-              )}
             </>
           ) : (
-            <div className="col-span-full text-center py-10 text-kawaii-text-sub flex flex-col items-center gap-4 font-cute">
-              <div className="w-20 h-20 bg-kawaii-pink-50 rounded-full flex items-center justify-center">
-                <Search className="w-10 h-10 text-kawaii-pink-200" />
-              </div>
-              <p className="text-lg">没有找到匹配的食谱</p>
+            <div className="col-span-full text-center py-20 text-gray-400 font-cute">
+              <p className="text-lg">没有找到相关食谱...</p>
               <button 
-                onClick={() => setInputValue('')}
-                className="text-kawaii-pink-500 text-sm hover:underline hover:text-kawaii-pink-700"
+                onClick={() => {
+                  setInputValue('');
+                  setSelectedLetter(null);
+                }}
+                className="mt-4 text-kawaii-pink-500 hover:text-kawaii-pink-700 underline"
               >
-                清除搜索
+                清除筛选条件
               </button>
             </div>
           )}
+          
+          {/* Load More Trigger */}
+          <div ref={loadMoreRef} className="h-10 col-span-full w-full"></div>
         </div>
       )}
     </div>
