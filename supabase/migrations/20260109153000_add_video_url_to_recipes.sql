@@ -1,0 +1,2 @@
+
+ALTER TABLE recipes ADD COLUMN IF NOT EXISTS video_url text;
